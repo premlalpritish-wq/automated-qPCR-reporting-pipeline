@@ -1,0 +1,47 @@
+@"
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Byte-compiled / caches
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Backups and generated reports
+Backups/
+reports/
+report.full.html
+report_debug.html
+report_direct.pdf
+report_simple.html
+report.md
+
+# Logs and local data
+*.log
+*.sqlite
+*.db
+
+# Other
+*.xlsx
+"@ > .gitignore
+
+git add .gitignore
+git commit -m "chore: add .gitignore"
