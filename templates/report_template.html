@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>$title$</title>
+
+    $if(css)$
+    $for(css)$
+    <link rel="stylesheet" href="$css$" />
+    $endfor$
+    $endif$
+
+    <style>
+        :root {
+            --muted: #666;
+            --border: #e6e6e6;
+            --bg: #fff;
+            --text: #222;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            padding: 18mm;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .report-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .report-logo img {
+            max-height: 64px;
+            display: block;
+        }
+
+        .report-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+        }
+
+        .report-meta {
+            font-size: 0.95rem;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .summary-block {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+
+        .col {
+            width: 48%;
+            vertical-align: top;
+        }
+
+        h2 {
+            font-size: 1.05rem;
+            margin: 8px 0;
+            color: #111;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 12px 0;
+            font-size: 0.95rem;
+        }
+
+        table th,
+        table td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        table thead th {
+            background: #fafafa;
+            font-weight: 600;
+        }
+
+        .plots-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 8px 0;
+        }
+
+        .plot {
+            flex: 1 1 48%;
+            max-width: 48%;
+            box-sizing: border-box;
+        }
+
+        figure img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid var(--border);
+            padding: 2px;
+            background: white;
+        }
+
+        .caption {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .report-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width:700px) {
+            .summary-block {
+                flex-direction: column
+            }
+
+            .col {
+                width: 100%
+            }
+
+            .plot {
+                max-width: 100%
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <header class="report-header">
+            <div class="report-logo">
+                $if(logo)$
+                <img src="$logo$" alt="logo">
+                $endif$
+            </div>
+            <div style="flex:1; padding-left:12px;">
+                <div class="report-title">$title$</div>
+                <div class="report-meta">
+                    <p><strong>Experiment:</strong> $experiment_name$</p>
+                    <p><strong>Date:</strong> $date$</p>
+                    <p><strong>Analyst:</strong> $analyst$</p>
+                </div>
+            </div>
+            <div style="text-align:right; min-width:120px;">
+                <div style="font-size:0.9rem; color:var(--muted);">Generated: $date$</div>
+            </div>
+        </header>
+
+        <main>
+            <!-- <- THIS LINE embeds the converted Markdown into the template -->
+            $body$
+            <!-- end of injected document body -->
+        </main>
+
+        <footer class="report-footer">
+            <div>Automated qPCR pipeline</div>
+            <div></div>
+        </footer>
+    </div>
+</body>
+
+</html>

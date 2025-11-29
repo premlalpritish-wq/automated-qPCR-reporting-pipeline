@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2025-11-22" />
+  <title>Auto qPCR run</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Auto qPCR run</h1>
+<p class="date">2025-11-22</p>
+</header>
+<h1 id="automated-qpcr-analysis-report">Automated qPCR Analysis
+Report</h1>
+<p><strong>Experiment:</strong> Auto qPCR run <strong>Date:</strong>
+2025-11-22 <strong>Analyst:</strong> Auto-analyst</p>
+<h2 id="summary-of-results">Summary of Results</h2>
+<ul>
+<li><p>TargetX | Control_1: Fold-change 1.11</p></li>
+<li><p>TargetX | Control_2: Fold-change 0.90</p></li>
+<li><p>TargetX | ExpA_1: Fold-change 11.71</p></li>
+<li><p>TargetX | ExpA_2: Fold-change 10.93</p></li>
+</ul>
+<h2 id="qc-summary">QC Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NTC</td>
+<td>pass</td>
+<td>No amplification in NTC</td>
+</tr>
+<tr>
+<td>Replicate variance</td>
+<td>Warn</td>
+<td>Control_1</td>
+</tr>
+<tr>
+<td>Housekeeping</td>
+<td>Warn</td>
+<td>GAPDH: fail; ACTB: missing</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cleaned-ct-table">Cleaned CT Table</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Sample</th>
+<th style="text-align: left;">Target</th>
+<th style="text-align: right;">CT_mean</th>
+<th style="text-align: right;">n_rep</th>
+<th style="text-align: right;">CT_sd</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Control_1</td>
+<td style="text-align: left;">GAPDH</td>
+<td style="text-align: right;">18.4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">Control_1</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">Control_2</td>
+<td style="text-align: left;">GAPDH</td>
+<td style="text-align: right;">18.6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">Control_2</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">22.5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">ExpA_1</td>
+<td style="text-align: left;">GAPDH</td>
+<td style="text-align: right;">19.1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">ExpA_1</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">19.3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">ExpA_2</td>
+<td style="text-align: left;">GAPDH</td>
+<td style="text-align: right;">19.4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">ExpA_2</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">19.7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">nan</td>
+</tr>
+<tr>
+<td style="text-align: left;">NTC</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">nan</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">nan</td>
+</tr>
+</tbody>
+</table>
+<h2 id="δct-δδct-analysis">ΔCT / ΔΔCT Analysis</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Sample</th>
+<th style="text-align: left;">Target</th>
+<th style="text-align: right;">DeltaCT</th>
+<th style="text-align: right;">DeltaDeltaCT</th>
+<th style="text-align: right;">FoldChange</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Control_1</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">-0.15</td>
+<td style="text-align: right;">1.10957</td>
+</tr>
+<tr>
+<td style="text-align: left;">Control_2</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">0.90125</td>
+</tr>
+<tr>
+<td style="text-align: left;">ExpA_1</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">-3.55</td>
+<td style="text-align: right;">11.7127</td>
+</tr>
+<tr>
+<td style="text-align: left;">ExpA_2</td>
+<td style="text-align: left;">TargetX</td>
+<td style="text-align: right;">0.3</td>
+<td style="text-align: right;">-3.45</td>
+<td style="text-align: right;">10.9283</td>
+</tr>
+</tbody>
+</table>
+<h2 id="plots">Plots</h2>
+<figure>
+<img
+src="file:///D:/Pritish/Ideas/specialised%20biotech%20automation%20consultant/Portfolio/Project%201/automated_qpcr/reports/run_20251122T180422/assets/replicate_distribution.png"
+alt="replicate" />
+<figcaption aria-hidden="true">replicate</figcaption>
+</figure>
+<figure>
+<img
+src="file:///D:/Pritish/Ideas/specialised%20biotech%20automation%20consultant/Portfolio/Project%201/automated_qpcr/reports/run_20251122T180422/assets/ddct_values.png"
+alt="ddct" />
+<figcaption aria-hidden="true">ddct</figcaption>
+</figure>
+<h2 id="interpretation">Interpretation</h2>
+<p>The no-template control (NTC) showed no detectable amplification
+across targets, indicating no evidence of contamination or widespread
+primer-dimer artifacts.</p>
+<p>Housekeeping QC flags detected (failed: GAPDH; missing: ACTB).
+Normalization may be unreliable for some comparisons.</p>
+<p>Technical replicates showed acceptable variance for most
+samples/targets.</p>
+<p>For <strong>TargetX</strong>, experimental samples show mean ΔΔCT =
+-3.50, corresponding to a mean fold change ≈ 11.32. This suggests the
+gene is strongly upregulated.</p>
+<p>At least one QC criterion failed or raised warnings; interpret
+fold-change values with caution and consider repeating critical
+samples.</p>
+</body>
+</html>

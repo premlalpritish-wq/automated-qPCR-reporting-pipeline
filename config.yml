@@ -1,0 +1,48 @@
+# Project config — tweak thresholds and behaviour here
+
+experiment:
+  housekeeping_genes: ["GAPDH", "ACTB"]
+  control_condition_name: "Control"
+
+qc:
+  ntc_ct_threshold: 35.0          # NTC should be undetermined or > this CT
+  positive_control_ct_min: 10.0  # positive control should be < this CT
+  replicate_variance_max: 0.3    # SD (or range) limit for technical replicates (CTs)
+  housekeeping_variance_max: 0.3
+  melt_peak_prominence_min: 0.2   # relative prominence for single-peak detection
+  melt_single_peak_tolerance: 0.05 # allowed second-peak prominence fraction
+
+  # New behaviour flags
+  min_replicates: 2               # treat n_rep < this as "insufficient_replicates"
+  fail_on_missing_housekeeping: false
+  fallback_normalization: "median_control"   # options: "none" | "median_control"
+  warn_on_single_replicate: true  # still report fold-change but mark low confidence
+
+analysis:
+  min_replicates: 2
+  ddct_confidence_method: "bootstrap"  # "bootstrap" or "analytical"
+  bootstrap_iterations: 2000           # used when ddct_confidence_method = "bootstrap"
+
+report:
+  author: "Auto-analyst"
+  date_format: "%Y-%m-%d"
+
+# Provenance & reproducibility metadata to embed in each report
+provenance:
+  include_input_sha256: true
+  include_config_snapshot: true
+  include_git_commit: true   # set to false if running outside a repo
+
+# Confidence scoring thresholds (used to translate QC into High/Med/Low)
+confidence:
+  high:
+    min_replicates: 3
+    max_replicate_variance: 0.2
+    housekeeping_ok: true
+  medium:
+    min_replicates: 2
+    max_replicate_variance: 0.5
+  low:
+    # anything that falls below medium criteria is low confidence
+    # note: single replicate always => low unless special override
+    annotate_single_replicate_as_low: true

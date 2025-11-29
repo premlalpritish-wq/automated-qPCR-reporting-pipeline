@@ -1,0 +1,103 @@
+/* report_style.css — complementary styling (optional; inline CSS in template will work if this fails) */
+
+/* Base */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+    color: #222;
+    background: #fff;
+}
+
+/* Header */
+.report-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.report-logo img {
+    max-height: 64px;
+    display: block;
+}
+
+.report-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.report-meta p {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+table th,
+table td {
+    border: 1px solid #e6e6e6;
+    padding: 6px 8px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+table thead th {
+    background: #fafafa;
+    font-weight: 600;
+}
+
+/* Plots */
+.plots-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.plot {
+    flex: 1 1 48%;
+    max-width: 48%;
+}
+
+figure img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #eaeaea;
+    background: white;
+    padding: 2px;
+    display: block;
+}
+
+/* Misc */
+.section-sep {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 12px 0;
+}
+
+.report-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.caption {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 6px;
+}

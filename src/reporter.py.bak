@@ -1,0 +1,164 @@
+# src/reporter.py
+import jinja2
+import pandas as pd
+from datetime import datetime
+import os
+import subprocess
+import tempfile
+import shutil
+import time
+
+# Markdown-to-PDF template (fallback)
+TEMPLATE_MD = """
+# Automated qPCR Analysis Report
+
+**Experiment:** {{ experiment_name }}
+**Date:** {{ date }}
+**Analyst:** {{ analyst }}
+
+## Summary of Results
+{% for s in summary %}
+- {{ s }}
+{% endfor %}
+
+## QC Summary
+{{ qc_table_md | safe }}
+
+## Cleaned CT Table
+{{ ct_table }}
+
+## ΔCT / ΔΔCT Analysis
+{{ ddct_table }}
+
+## Plots
+{% if plots.replicate_distribution %}
+![replicate]({{ plots.replicate_distribution }})
+{% endif %}
+
+{% if plots.ddct_bars %}
+![ddct]({{ plots.ddct_bars }})
+{% endif %}
+
+## Interpretation
+{{ interpretation }}
+"""
+
+
+def ensure_dir(path: str):
+    os.makedirs(path, exist_ok=True)
+    return path
+
+
+def render_report_md(output_path: str, context: dict):
+    """
+    Render the Jinja Markdown template to a UTF-8 Markdown file and
+    include YAML front-matter so Pandoc fills template variables.
+    """
+    import jinja2
+    env = jinja2.Environment()
+    tpl = env.from_string(TEMPLATE_MD)
+    md_body = tpl.render(**context)
+
+    # Build YAML front-matter with the metadata keys Pandoc template expects.
+    # Keep only simple scalar values here; large tables/images remain in body.
+    yaml_meta_lines = [
+        "---",
+        f'title: "{context.get("experiment_name", "Automated qPCR Analysis Report")}"',
+        f'experiment_name: "{context.get("experiment_name", "")}"',
+        f'date: "{context.get("date", "")}"',
+        f'analyst: "{context.get("analyst", "")}"',
+    ]
+    # If logo exists in templates folder, add metadata so template can refer to it
+    if os.path.exists(os.path.join("templates", "logo.png")):
+        yaml_meta_lines.append(f'logo: "logo.png"')
+
+    yaml_meta_lines.append("---\n")
+
+    full_md = "\n".join(yaml_meta_lines) + md_body
+
+    # write utf-8 to avoid Windows encoding issues
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(full_md)
+
+    return output_path
+
+
+def md_to_pdf(md_path: str, pdf_path: str, wkhtmltopdf_path=None):
+    """
+    Render Markdown -> PDF using Pandoc + HTML template + wkhtmltopdf.
+    - md_path: full or relative path to report.md
+    - pdf_path: desired output pdf path
+    - wkhtmltopdf_path: optional full path to wkhtmltopdf executable to avoid PATH issues
+    """
+
+    md_dir = os.path.dirname(os.path.abspath(md_path)) or os.getcwd()
+    md_basename = os.path.basename(md_path)
+
+    # templates
+    templates_dir = os.path.abspath(os.path.join(os.getcwd(), "templates"))
+    template_file = os.path.join(templates_dir, "report_template.html")
+    css_file = os.path.join(templates_dir, "report_style.css")
+    logo_file = os.path.join(templates_dir, "logo.png")
+    # if logo exists pass relative name to template context via metadata: we will rely on template variables handled by pandoc call
+
+    # create temporary pdf in same dir (to allow atomic move)
+    fd, tmp_pdf = tempfile.mkstemp(suffix=".pdf", dir=md_dir)
+    os.close(fd)
+
+    try:
+        # build pandoc command
+        pandoc_cmd = ["pandoc", md_basename, "-o",
+                      os.path.basename(tmp_pdf), "--resource-path=."]
+
+        # prefer wkhtmltopdf engine if available
+        if wkhtmltopdf_path:
+            pandoc_cmd += ["--pdf-engine=" + wkhtmltopdf_path]
+        else:
+            pandoc_cmd += ["--pdf-engine=wkhtmltopdf"]
+
+        # include template + css if present
+        if os.path.exists(template_file):
+            pandoc_cmd += ["--template", template_file]
+        if os.path.exists(css_file):
+            pandoc_cmd += ["--css", css_file]
+
+        # If logo exists, pandoc will include it by template references relative to resource-path
+        # Run pandoc from the md directory so relative paths resolve
+        try:
+            subprocess.check_call(pandoc_cmd, cwd=md_dir)
+        except subprocess.CalledProcessError:
+            # Attempt fallback: no engine - let pandoc pick (may require LaTeX)
+            fallback = ["pandoc", md_basename, "-o",
+                        os.path.basename(tmp_pdf), "--resource-path=."]
+            if os.path.exists(template_file):
+                fallback += ["--template", template_file]
+            if os.path.exists(css_file):
+                fallback += ["--css", css_file]
+            subprocess.check_call(fallback, cwd=md_dir)
+
+        # move temp->final with retries to handle locks
+        attempts = 6
+        for attempt in range(attempts):
+            try:
+                if os.path.exists(pdf_path):
+                    try:
+                        os.remove(pdf_path)
+                    except PermissionError:
+                        time.sleep(0.5 + 0.2 * attempt)
+                        continue
+                shutil.move(tmp_pdf, pdf_path)
+                return pdf_path
+            except PermissionError:
+                time.sleep(0.5 + 0.2 * attempt)
+                continue
+            except Exception:
+                time.sleep(0.2)
+                continue
+
+        raise RuntimeError(f"Could not write {pdf_path}; file may be locked.")
+    finally:
+        try:
+            if os.path.exists(tmp_pdf):
+                os.remove(tmp_pdf)
+        except Exception:
+            pass
