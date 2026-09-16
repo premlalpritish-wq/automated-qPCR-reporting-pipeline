@@ -188,8 +188,6 @@ AI-assisted support workflows
 
 any repetitive data→report pipeline
 
-This is why this project is used as a technical depth signal in the broader automation consulting roadmap.
-
 🔭 Roadmap
 
 melt-curve extraction
