@@ -15,6 +15,19 @@ import pathlib
 from interpretation import generate_interpretation
 
 
+def _md_cell(value) -> str:
+    """Escape a value so it survives as a single Markdown table cell.
+
+    ``|`` is a column separator in Markdown tables. QC notes join findings as
+    ``sample|target``, so an unescaped value silently turns one cell into
+    several columns and drops every finding after the first. Line breaks are
+    collapsed to spaces because they would end the table row early.
+    """
+    text = "" if value is None else str(value)
+    text = text.replace("\r\n", " ").replace("\r", " ").replace("\n", " ")
+    return text.replace("|", r"\|")
+
+
 def qc_summary_to_markdown(qc_ntc, qc_reps, qc_hk):
     """
     Build a small readable markdown table summarizing QC.
@@ -61,7 +74,7 @@ def qc_summary_to_markdown(qc_ntc, qc_reps, qc_hk):
     # transform to markdown
     md = "| Test | Status | Notes |\n|---|---|---|\n"
     for t, s, n in rows:
-        md += f"| {t} | {s} | {n} |\n"
+        md += f"| {_md_cell(t)} | {_md_cell(s)} | {_md_cell(n)} |\n"
     return md
 
 
