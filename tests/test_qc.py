@@ -37,7 +37,8 @@ def test_replicate_variance_check_flags():
     fails = [r for r in rep_res if r['sample']=="Exp" and r['target']=="TargetX"]
     assert len(fails) == 1
     assert fails[0]['status'] == "fail"
-    assert fails[0]['range'] >= 6.0
+    # the QC engine documents this key as `ct_range`, not `range`
+    assert fails[0]['ct_range'] >= 6.0
 
 def test_housekeeping_consistency():
     df = make_df()
