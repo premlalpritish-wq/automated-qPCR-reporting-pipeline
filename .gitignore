@@ -37,6 +37,17 @@ report_direct.pdf
 report_simple.html
 report.md
 
+# Local build toolchain, installed into the working copy
+.tools/
+
+# Regenerated report artefacts kept as local evidence. The verification
+# script is tracked; the outputs it checks are not, because they embed
+# absolute paths from whichever machine ran the pipeline.
+regen_report.md
+regen_report.pdf
+evidence/*
+!evidence/verify_qc_findings.py
+
 # Logs and local data
 *.log
 *.sqlite
